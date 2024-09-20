@@ -1,7 +1,7 @@
 package interfaces;
 
+import entidades.cuenta.Cuenta;
+
 public interface IRetirable {
-    default void retirar(float monto) {
-        // implementación
-    }
+    public void retirar(Cuenta cuenta, float monto);
 }

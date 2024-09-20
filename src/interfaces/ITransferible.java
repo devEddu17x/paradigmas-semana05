@@ -1,8 +1,8 @@
 package interfaces;
 
+import entidades.cuenta.Cuenta;;
+
 public interface ITransferible {
 
-    default void transferir(float monto, String cuentaDestino) {
-        // implementación
-    }
+    public void transferir(Cuenta cuenta, float monto, String cuentaDestino);
 }

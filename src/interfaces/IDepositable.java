@@ -1,7 +1,7 @@
 package interfaces;
 
+import entidades.cuenta.Cuenta;
+
 public interface IDepositable {
-    default void depositar(float monto) {
-        // implementacion
-    }
+    public void depositar(Cuenta cuenta, float monto);
 }
