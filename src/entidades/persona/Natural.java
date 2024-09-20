@@ -1,24 +1,12 @@
 package entidades.persona;
 
-public class Natural {
-    protected String nombre;
-    protected String apellido;
-    protected String DNI;
+public class Natural extends Persona {
 
-    public String getNombre() {
-        return nombre;
-    }
+    private String DNI;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public Natural(String direccion, String email, String telefono, String nombre, String apellido, String DNI) {
+        super(direccion, email, telefono, nombre, apellido);
+        this.DNI = DNI;
     }
 
     public String getDNI() {
