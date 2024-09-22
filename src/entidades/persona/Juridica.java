@@ -1,9 +1,19 @@
 package entidades.persona;
 
-public class Juridica {
+public class Juridica extends Persona {
+
     protected String ruc;
     protected String dniRepresentante;
     protected String poderRegistral;
+
+    public Juridica(String direccion, String email, String telefono, String nombre, String apellido, String ruc,
+            String dniRepresentante,
+            String poderRegistral) {
+        super(direccion, email, telefono, nombre, apellido);
+        this.ruc = ruc;
+        this.dniRepresentante = dniRepresentante;
+        this.poderRegistral = poderRegistral;
+    }
 
     public String getRuc() {
         return ruc;

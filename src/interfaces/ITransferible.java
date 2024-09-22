@@ -4,5 +4,5 @@ import entidades.cuenta.Cuenta;;
 
 public interface ITransferible {
 
-    public void transferir(Cuenta cuenta, float monto, String cuentaDestino);
+    public void transferir(Cuenta cuenta, float monto, Cuenta cuentaDestino);
 }

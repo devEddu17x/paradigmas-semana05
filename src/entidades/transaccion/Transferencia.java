@@ -3,7 +3,6 @@ package entidades.transaccion;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import datos.Cuentas;
 import enums.Moneda;
 import interfaces.ITransferible;
 import entidades.cuenta.Cuenta;
@@ -21,18 +20,19 @@ public class Transferencia extends Transaccion implements ITransferible {
         this.moneda = moneda;
     }
 
+    public void setBeneficiario(String beneficiario) {
+        this.beneficiario = beneficiario;
+    }
+
     @Override
-    public void transferir(Cuenta cuenta, float monto, String cuentaDestino) {
+    public void transferir(Cuenta cuenta, float monto, Cuenta cuentaBeneficiaria) {
         if (monto <= 0) {
             throw new Error("El monto a transferir debe ser mayor a 0");
         } else if (monto > cuenta.getSaldo()) {
             throw new Error("Saldo insuficiente");
         }
-        Cuenta cuentaBeneficiaria = Cuentas.getCuenta(cuentaDestino);
 
-        if (cuentaBeneficiaria == null) {
-            throw new Error("Cuenta destino no existe");
-        } else if (cuentaBeneficiaria.getNumeroCuenta().equals(cuenta.getNumeroCuenta())) {
+        if (cuentaBeneficiaria.getNumeroCuenta().equals(cuenta.getNumeroCuenta())) {
             throw new Error("No se puede transferir a la misma cuenta");
         } else if (cuenta.getMoneda() != cuentaBeneficiaria.getMoneda()) {
             throw new Error("Las cuentas deben ser de la misma moneda");
