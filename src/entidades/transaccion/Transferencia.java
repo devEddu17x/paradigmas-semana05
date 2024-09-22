@@ -1,7 +1,7 @@
 package entidades.transaccion;
 
 import java.text.MessageFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import enums.Moneda;
 import interfaces.ITransferible;
@@ -15,7 +15,7 @@ public class Transferencia extends Transaccion implements ITransferible {
     private String numeroCuentaDestino;
     private String numeroOperacion;
 
-    public Transferencia(String titular, float monto, String numeroCuenta, Date fechaHora, Moneda moneda) {
+    public Transferencia(String titular, float monto, String numeroCuenta, LocalDate fechaHora, Moneda moneda) {
         super(titular, monto, numeroCuenta, fechaHora);
         this.moneda = moneda;
     }

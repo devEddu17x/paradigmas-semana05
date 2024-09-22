@@ -17,6 +17,13 @@ public class Main {
         c2.depositar(p1, 100);
         c2.depositar(p2, 100);
 
+        // retirar de cuenta con p1 y p2
+        c2.retirar(p1, 50);
+        c2.retirar(p2, 23);
+
+        // retirar cliente p1
+        c2.quitarCliente(p1);
+        c2.quitarCliente(p2);
         // ver estado de p1 y p2
         p1.verEstado();
         p2.verEstado();

@@ -1,13 +1,13 @@
 package entidades.transaccion;
 
 import java.text.MessageFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import entidades.cuenta.Cuenta;
 import interfaces.IRetirable;
 
 public class Retiro extends Transaccion implements IRetirable {
-    public Retiro(String titular, float monto, String numeroCuenta, Date fechaHora) {
+    public Retiro(String titular, float monto, String numeroCuenta, LocalDate fechaHora) {
         super(titular, monto, numeroCuenta, fechaHora);
     }
 
