@@ -3,7 +3,7 @@ package entidades.cuenta;
 import enums.Moneda;
 
 import java.text.MessageFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import datos.Cuentas;
 import entidades.persona.Persona;
@@ -22,8 +22,8 @@ public class Cuenta {
     private boolean bloqueada;
     private float montoMantenimiento;
     private EstadoCuenta estadoCuenta;
-    private Date fechaCreacion;
-    private Date uttimoPagoMantenimiento;
+    private LocalDate fechaCreacion;
+    private LocalDate uttimoPagoMantenimiento;
 
     public Cuenta(String numeroCuenta, Moneda moneda, float saldo, float montoDiarioRetiro,
             Persona cliente) {
@@ -37,7 +37,7 @@ public class Cuenta {
         this.montoMantenimiento = moneda == Moneda.SOLES ? 10 : 3;
         this.estadoCuenta = new EstadoCuenta();
         this.bloqueada = false;
-        fechaCreacion = new Date();
+        fechaCreacion = LocalDate.now();
         this.uttimoPagoMantenimiento = fechaCreacion;
     }
 
@@ -85,29 +85,37 @@ public class Cuenta {
             System.out.println("La persona ya tiene una cuenta");
             return;
 
-        } else if (clientes[0] != null) {
+        } else if (clientes[1] == null) {
             clientes[1] = cliente;
-            mancomunada = true;
-            cliente.setCuenta(this);
-        } else if (clientes[1] != null) {
-            clientes[0] = cliente;
             mancomunada = true;
             cliente.setCuenta(this);
         }
     }
 
     public void quitarCliente(Persona cliente) {
-        if (clientes[0].getEmail() != cliente.getEmail() && clientes[1].getEmail() != cliente.getEmail()) {
-            System.out.println("La persona no es titular");
+        boolean soloUno = (clientes[0] != null && clientes[1] == null)
+                || (clientes[0] == null && clientes[1] != null);
+        if (soloUno) {
+            System.out.println("La cuenta debe tener al menos un cliente");
             return;
         }
-        if (clientes[0].getEmail() == cliente.getEmail()) {
+
+        boolean esPrimeraPersona = clientes[0] != null && clientes[0].getEmail().equals(cliente.getEmail());
+        boolean esSegundaPersona = clientes[1] != null && clientes[1].getEmail().equals(cliente.getEmail());
+
+        if (esPrimeraPersona && !soloUno) {
             clientes[0] = clientes[1];
             clientes[1] = null;
             mancomunada = false;
-        } else {
+            cliente.setCuenta(null);
+            System.out.println("Cliente eliminado");
+        } else if (esSegundaPersona && !soloUno) {
             clientes[1] = null;
             mancomunada = false;
+            cliente.setCuenta(null);
+            System.out.println("Cliente eliminado");
+        } else {
+            System.out.println("La persona no es titular de la cuenta");
         }
     }
 
@@ -139,21 +147,26 @@ public class Cuenta {
                     "Cuenta bloqueada por no pagar mantenimiento. Deposite un monto mayor al monto de mantenimiento para desbloquear.");
         }
         saldo -= montoMantenimiento;
-        uttimoPagoMantenimiento = new Date();
+        uttimoPagoMantenimiento = LocalDate.now();
     }
 
     public void depositar(Persona persona, float montoDeposito) {
 
-        Date fechaActual = new Date();
+        LocalDate fechaActual = LocalDate.now();
         try {
             if (bloqueada && montoDeposito > montoMantenimiento) {
                 montoDeposito -= montoMantenimiento;
                 uttimoPagoMantenimiento = fechaActual;
                 bloqueada = false;
+            } else {
+                if (fechaActual.getMonthValue() > uttimoPagoMantenimiento.getMonthValue() ||
+                        fechaActual.getYear() > uttimoPagoMantenimiento.getYear()) {
+                    montoDeposito -= montoMantenimiento;
+                    uttimoPagoMantenimiento = fechaActual;
+                    bloqueada = false;
+                }
             }
-            if (fechaActual.getTime() - uttimoPagoMantenimiento.getTime() >= 30 * 24 * 60 * 60 * 1000) {
-                pagarMantenimiento();
-            }
+
         } catch (Error e) {
             System.err.println(e.getMessage());
             return;
@@ -165,7 +178,7 @@ public class Cuenta {
         }
 
         Deposito deposito = new Deposito(
-                persona.getNombre() + " " + persona.getApellido(), montoDeposito, this.numeroCuenta, new Date());
+                persona.getNombre() + " " + persona.getApellido(), montoDeposito, this.numeroCuenta, LocalDate.now());
         try {
             deposito.depositar(this, montoDeposito);
             estadoCuenta.agregarTransaccion(deposito);
@@ -185,7 +198,7 @@ public class Cuenta {
         }
 
         Retiro retiro = new Retiro(persona.getNombre() + " " + persona.getApellido(), monto, this.numeroCuenta,
-                new Date());
+                LocalDate.now());
         try {
 
             retiro.retirar(this, monto);
@@ -210,7 +223,7 @@ public class Cuenta {
                 throw new Error("Cuenta destino no existe");
             }
             Transferencia transferencia = new Transferencia(persona.getNombre() + " " + persona.getApellido(), monto,
-                    this.numeroCuenta, new Date(), moneda);
+                    this.numeroCuenta, LocalDate.now(), moneda);
             transferencia.transferir(this, monto, cuentaBeneficiaria);
             guardarTransaccion(transferencia);
             cuentaBeneficiaria.guardarTransaccion(transferencia);
