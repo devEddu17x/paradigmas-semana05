@@ -25,6 +25,10 @@ public class Persona {
         this.cuenta = cuenta;
     }
 
+    public boolean tieneCuente() {
+        return cuenta != null;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -78,6 +82,10 @@ public class Persona {
     }
 
     public void verEstado() {
+        if (cuenta == null) {
+            System.out.println("No tiene cuenta");
+            return;
+        }
         cuenta.getEstadoCuenta();
     }
 
