@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 
 import datos.Cuentas;
+import entidades.credito.Credito;
 import entidades.persona.Persona;
 import entidades.transaccion.Deposito;
 import entidades.transaccion.Retiro;
@@ -24,6 +25,7 @@ public class Cuenta {
     private EstadoCuenta estadoCuenta;
     private LocalDate fechaCreacion;
     private LocalDate uttimoPagoMantenimiento;
+    private Credito credito;
 
     public Cuenta(String numeroCuenta, Moneda moneda, float saldo, float montoDiarioRetiro,
             Persona cliente) {

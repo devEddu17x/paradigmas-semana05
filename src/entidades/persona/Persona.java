@@ -98,7 +98,8 @@ public class Persona {
                 Email: {3}
                 Telefono: {4}
                 Cuenta: {5}
-                """, nombre, apellido, direccion, email, telefono, cuenta);
+                """, nombre, apellido, direccion, email, telefono,
+                cuenta == null ? "No tiene" : cuenta.getNumeroCuenta());
     }
 
 }
